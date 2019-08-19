@@ -105,5 +105,19 @@ namespace QuantConnect.Data
                 subscription.DataNormalizationMode = mode;
             }
         }
+
+        /// <summary>
+        /// Will determine if map files should be used for this subscription configuration
+        /// </summary>
+        /// <param name="config">The subscription data configuration we are processing</param>
+        /// <returns>True if map files should be used</returns>
+        public static bool ShouldUseMapFiles(this SubscriptionDataConfig config)
+        {
+            // we create an instance of the data type, if it is a custom type
+            // if will override UsesMapFiles else it will use security type
+            var instance = config.Type.GetBaseDataInstance();
+            instance.Symbol = config.Symbol;
+            return instance.UsesMapFiles();
+        }
     }
 }
